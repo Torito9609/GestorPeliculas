@@ -48,24 +48,6 @@ Se ejecutarán todas las pruebas requeridas.
 - Eclipse IDE con soporte para JUnit 5
 - No requiere base de datos ni frameworks externos
 
----
-
-## 📁 Estructura del proyecto
-
-src/
-└── co/edu/unbosque/
-├── modelo/
-├── vista/
-├── controlador/
-└── AplMain.java
-
-test/
-└── co/edu/unbosque/modelo/
-├── GestorPeliculasTest.java
-└── SuitePruebas.java
-
-
----
 
 ## 📌 Nota
 
