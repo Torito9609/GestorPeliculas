@@ -13,7 +13,6 @@ public class PanelBuscarPelicula extends JPanel {
     private JTextField txtBuscar;
     private JButton btnBuscar;
     private JTable tablaResultados;
-    private JScrollPane scrollTabla;
     private JButton btnVolver;
     private DefaultTableModel modeloTabla;
 

@@ -167,7 +167,9 @@ public class Controlador implements ActionListener{
 	}
 	
 	private void buscarPelicula() {
-		
+		String nombre = vista.getVentana().getPanelBuscar().getTextoBusqueda();
+		List<PeliculaDto> coincidencias = gestor.buscarPorTitulo(nombre);
+		vista.getVentana().getPanelBuscar().actualizarTabla(coincidencias);
 	}
 	
 	private void filtrarPorGenero() {
