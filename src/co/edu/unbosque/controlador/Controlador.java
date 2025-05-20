@@ -45,6 +45,7 @@ public class Controlador implements ActionListener{
 		comandos.put("FINALIZAR_ELIMINAR", this::finalizarEliminarPelicula);
 		comandos.put("ORDENAR_DIRECCION", this::ordenarTabla);
 		comandos.put("LIMPIAR_FILTROS", this::limpiarFiltros);
+		comandos.put("ESTADISTICAS", this::mostrarPanelEstadisticas);
 	}
 	
 	private void asignarOyentes() {
@@ -52,6 +53,7 @@ public class Controlador implements ActionListener{
 		vista.getVentana().getVistaMenu().getBtnEditar().addActionListener(this);
 		vista.getVentana().getVistaMenu().getBtnEliminar().addActionListener(this);
 		vista.getVentana().getVistaMenu().getBtnBuscar().addActionListener(this);
+		vista.getVentana().getVistaMenu().getBtnEstadisticas().addActionListener(this);
 		vista.getVentana().getVistaMenu().getComboFiltroGenero().addActionListener(this);
 	}
 	
@@ -173,14 +175,40 @@ public class Controlador implements ActionListener{
 	}
 	
 	private void filtrarPorGenero() {
-		
+		String genero = vista.getVentana().getVistaMenu().getComboFiltroGenero().getSelectedItem().toString();
+		List<PeliculaDto> peliculas = gestor.filtrarPorGenero(genero);
+		vista.getVentana().getVistaMenu().actualizarTabla(peliculas);
 	}
 	
 	private void ordenarTabla() {
+		String criterio = vista.getVentana().getVistaMenu().getComboOrdenarPor().getSelectedItem().toString();
+		switch(criterio) {
+		case "Fecha de estreno":
+			boolean ordenF = vista.getVentana().getVistaMenu().getComboDireccion().getSelectedItem().toString().equals("Ascendente");
+			List<PeliculaDto> peliculasF= gestor.obtenerPeliculasOrdenadasPorFecha(ordenF);
+			vista.getVentana().getVistaMenu().actualizarTabla(peliculasF);
+			break;
+		case "Calificacion":
+			boolean ordenC = vista.getVentana().getVistaMenu().getComboDireccion().getSelectedItem().toString().equals("Descendente");
+			List<PeliculaDto> peliculasC = gestor.obtenerPeliculasOrdenadasPorRating(ordenC);
+			vista.getVentana().getVistaMenu().actualizarTabla(peliculasC);
+			break;
+		}
 		
 	}
 	
 	private void limpiarFiltros() {
+		reiniciarTabla();
+	}
+	
+	private void mostrarPanelEstadisticas() {
+		double[] estadisticas = gestor.obtenerEstadisticas();
+		
+		vista.getVentana().getPanelEstadisticas().setTotalPeliculas((int) estadisticas[0]);
+		vista.getVentana().getPanelEstadisticas().setPromedioRating(estadisticas[1]);
+		vista.getVentana().getPanelEstadisticas().setDuracionTotalHoras(estadisticas[2]);
+		vista.getVentana().mostrarPanelEstadisticas();
+		vista.getVentana().getPanelEstadisticas().getBtnVolver().addActionListener(this);
 		
 	}
 	

@@ -9,14 +9,14 @@ import co.edu.unbosque.modelo.PeliculaDto;
 
 import java.awt.*;
 
-public class VistaPrincipal extends JPanel {
+public class PanelPrincipal extends JPanel {
 
-	private JButton btnAgregar, btnEditar, btnEliminar, btnBuscar, btnLimpiarFiltros;
+	private JButton btnAgregar, btnEditar, btnEliminar, btnBuscar, btnLimpiarFiltros, btnEstadisticas;
 	private JTable tablaPeliculas;
 	private JComboBox<String> comboFiltroGenero, comboOrdenarPor, comboDireccion;
 	private DefaultTableModel modeloTabla;
 
-	public VistaPrincipal() {
+	public PanelPrincipal() {
 		setLayout(new BorderLayout());
 		setBackground(Color.WHITE);
 		inicializarComponentes();
@@ -33,11 +33,14 @@ public class VistaPrincipal extends JPanel {
 		btnEliminar.setActionCommand("ELIMINAR");
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.setActionCommand("BUSCAR");
+		btnEstadisticas = new JButton("Estadisticas");
+		btnEstadisticas.setActionCommand("ESTADISTICAS");
 
 		panelBotones.add(btnAgregar);
 		panelBotones.add(btnEditar);
 		panelBotones.add(btnEliminar);
 		panelBotones.add(btnBuscar);
+		panelBotones.add(btnEstadisticas);
 
 		add(panelBotones, BorderLayout.NORTH);
 
@@ -46,14 +49,14 @@ public class VistaPrincipal extends JPanel {
 
 		String[] columnas = { "ID", "Nombre", "Género", "Fecha Estreno", "Rating" };
 		modeloTabla = new DefaultTableModel(null, columnas) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; 
-            }
-        };
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
-        tablaPeliculas = new JTable(modeloTabla);
-        JScrollPane scrollTabla = new JScrollPane(tablaPeliculas);
+		tablaPeliculas = new JTable(modeloTabla);
+		JScrollPane scrollTabla = new JScrollPane(tablaPeliculas);
 
 		panelCentro.add(scrollTabla, BorderLayout.CENTER);
 
@@ -66,7 +69,7 @@ public class VistaPrincipal extends JPanel {
 
 		panelFiltro.add(Box.createHorizontalStrut(20));
 
-		comboOrdenarPor = new JComboBox<>(new String[] { "Fecha de estreno", "Calificación" });
+		comboOrdenarPor = new JComboBox<>(new String[] { "Fecha de estreno", "Calificacion" });
 
 		comboDireccion = new JComboBox<>(new String[] { "Ascendente", "Descendente" });
 		comboDireccion.setActionCommand("ORDENAR_DIRECCION");
@@ -127,18 +130,21 @@ public class VistaPrincipal extends JPanel {
 		this.comboDireccion = comboDireccion;
 	}
 
+	public JButton getBtnEstadisticas() {
+		return btnEstadisticas;
+	}
+
+	public void setBtnEstadisticas(JButton btnEstadisticas) {
+		this.btnEstadisticas = btnEstadisticas;
+	}
+
 	public void actualizarTabla(List<PeliculaDto> listaPeliculas) {
 		modeloTabla.setRowCount(0);
 
 		for (PeliculaDto pelicula : listaPeliculas) {
-			Object[] fila = {
-				pelicula.getId(),
-				pelicula.getNombre(),
-				pelicula.getGenero(),
-				pelicula.getFechaEstreno().toString(),
-				pelicula.getRating()
-			};
+			Object[] fila = { pelicula.getId(), pelicula.getNombre(), pelicula.getGenero(),
+					pelicula.getFechaEstreno().toString(), pelicula.getRating() };
 			modeloTabla.addRow(fila);
-		}		
+		}
 	}
 }

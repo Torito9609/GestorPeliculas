@@ -58,6 +58,11 @@ public class GestorPeliculas {
 		List<Pelicula> ordenadas = gestor.ordenarPorRating(ascendente);
 		return MapHandler.allPeliculaToPeliculaDto(ordenadas);
 	}
+	
+	public double[] obtenerEstadisticas() {
+		return gestor.calcularEstadisticas();
+	}
+
 
 	public GestorPeliculasDao getGestor() {
 		return gestor;

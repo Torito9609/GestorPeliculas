@@ -176,4 +176,22 @@ public class GestorPeliculasDao implements IGestorPeliculasDao {
 		lista.set(fin, temp);
 		return i + 1;
 	}
+
+	@Override
+	public double[] calcularEstadisticas() {
+		double totalPeliculas = catalogo.size();
+		double sumaRatings = 0.0;
+		double sumaDuracionMinutos = 0.0;
+
+		for (Pelicula p : catalogo) {
+			sumaRatings += p.getRating();
+			sumaDuracionMinutos += p.getDuracionMinutos();
+		}
+
+		double promedioRating = totalPeliculas > 0 ? sumaRatings / totalPeliculas : 0.0;
+		double duracionHoras = sumaDuracionMinutos / 60.0;
+
+		return new double[] { totalPeliculas, promedioRating, duracionHoras };
+	}
+
 }

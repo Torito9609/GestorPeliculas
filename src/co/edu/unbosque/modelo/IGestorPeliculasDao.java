@@ -25,4 +25,6 @@ public interface IGestorPeliculasDao {
 	List<Pelicula> ordenarPorRating(boolean ascendente);
 	
 	boolean actualizar(String id, Pelicula peliculaActualizada) throws PeliculaNoEncontradaException;
+	
+	double[] calcularEstadisticas();
 }
