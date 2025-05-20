@@ -24,7 +24,7 @@ public class GestorPeliculasDao implements IGestorPeliculasDao {
 
 	@Override
 	public boolean guardar(Pelicula pelicula) throws PeliculaDuplicadaException {
-		System.out.println("Guardando desde DAO");
+		//System.out.println("Guardando desde DAO");
 		for (Pelicula peliculaC : catalogo) {
 			if (pelicula.getId().equals(peliculaC.getId())) {
 				throw new PeliculaDuplicadaException("No se pueden agregar películas con ID duplicado.");
@@ -77,6 +77,20 @@ public class GestorPeliculasDao implements IGestorPeliculasDao {
 		}
 		return coincidencias;
 	}
+	
+	@Override
+	public boolean actualizar(String id, Pelicula peliculaActualizada) throws PeliculaNoEncontradaException {
+		for (int i = 0; i < catalogo.size(); i++) {
+			Pelicula actual = catalogo.get(i);
+			if (actual.getId().equals(id)) {
+				peliculaActualizada.setId(id);
+				catalogo.set(i, peliculaActualizada);
+				return true;
+			}
+		}
+		throw new PeliculaNoEncontradaException("No se encontró la película con ID: " + id);
+	}
+
 
 	@Override
 	public boolean actualizarRating(String idActualizar, double rating) throws PeliculaNoEncontradaException {

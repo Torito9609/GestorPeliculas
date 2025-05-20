@@ -17,12 +17,17 @@ public class GestorPeliculas {
 
 	public void guardarPelicula(PeliculaDto peliculaDto) throws PeliculaDuplicadaException {
 		Pelicula pelicula = MapHandler.peliculaDtoToPelicula(peliculaDto);
-		System.out.println("Guardando desde gestor");
+		//System.out.println("Guardando desde gestor");
 		gestor.guardar(pelicula);
 	}
 	
 	public void eliminarPelicula(String id) throws PeliculaNoEncontradaException {
 		gestor.eliminar(id);
+	}
+	
+	public void actualizarPelicula(String id, PeliculaDto actualizada) throws PeliculaNoEncontradaException {
+		Pelicula pelicula = MapHandler.peliculaDtoToPelicula(actualizada);
+		gestor.actualizar(id, pelicula);
 	}
 	
 	public PeliculaDto buscarPorId(String id) throws PeliculaNoEncontradaException {

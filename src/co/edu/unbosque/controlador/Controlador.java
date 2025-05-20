@@ -101,11 +101,46 @@ public class Controlador implements ActionListener{
 	}
 	
 	private void buscarDesdeEdicion() {
-		
+		String idBuscar = vista.getVentana().getPanelEditar().getTxtIdBuscar().getText().trim();
+		try {
+			PeliculaDto peliculaEditar = gestor.buscarPorId(idBuscar);
+			vista.getVentana().getPanelEditar().llenarCampos(
+					peliculaEditar.getNombre(),
+					peliculaEditar.getGenero(),
+					String.valueOf(peliculaEditar.getRating()),
+					peliculaEditar.getFechaEstreno().toString(),
+					String.valueOf(peliculaEditar.getDuracionMinutos())
+					);
+			vista.getVentana().getPanelEditar().getIdOculto().setText(peliculaEditar.getId());
+		} catch (PeliculaNoEncontradaException e) {
+			vista.mostrarMensajeError(e.getMessage());
+		}
 	}
 	
 	private void finalizarEdicionPelicula() {
+		String nombre = vista.getVentana().getPanelEditar().getTxtNombre().getText().trim();
+		String genero = vista.getVentana().getPanelEditar().getComboGenero().getSelectedItem().toString();
+		LocalDate fecha = LocalDate.parse(vista.getVentana().getPanelEditar().getTxtFecha().getText());
+		double rating = Double.parseDouble(vista.getVentana().getPanelEditar().getTxtRating().getText());
+		double duracion = Double.parseDouble(vista.getVentana().getPanelEditar().getTxtDuracion().getText());
+		String id = vista.getVentana().getPanelEditar().getIdOculto().getText();
 		
+		PeliculaDto peliculaEditada = new PeliculaDto();
+		
+		peliculaEditada.setId(id);
+		peliculaEditada.setNombre(nombre);
+		peliculaEditada.setGenero(genero);
+		peliculaEditada.setFechaEstreno(fecha);
+		peliculaEditada.setRating(rating);
+		peliculaEditada.setDuracionMinutos(duracion);
+		
+		try {
+			gestor.actualizarPelicula(peliculaEditada.getId(), peliculaEditada);
+			reiniciarTabla();
+			volverAlInicio();
+		} catch (PeliculaNoEncontradaException e) {
+			vista.mostrarMensajeError(e.getMessage());
+		}
 	}
 	
 	private void mostrarPanelEliminar() {

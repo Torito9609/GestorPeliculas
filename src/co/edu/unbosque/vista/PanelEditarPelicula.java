@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PanelEditarPelicula extends JPanel {
-
+	private JLabel idOculto;
 	private JTextField txtIdBuscar, txtNombre, txtRating, txtFecha, txtDuracion;
 	private JComboBox<String> comboGenero;
 	private JButton btnBuscar, btnActualizar, btnVolver;
@@ -19,61 +19,87 @@ public class PanelEditarPelicula extends JPanel {
 	}
 
 	private void inicializarComponentes() {
-		JPanel panelFormulario = new JPanel(new GridLayout(7, 2, 10, 10));
+		JPanel panelFormulario = new JPanel(new GridBagLayout());
 		panelFormulario.setBorder(BorderFactory.createTitledBorder("Editar Película"));
 		panelFormulario.setBackground(Color.WHITE);
-		panelFormulario.setPreferredSize(new Dimension(450, 320));
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(8, 12, 8, 12); 
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1;
 
-		txtIdBuscar = new JTextField();
-		txtNombre = new JTextField();
+		txtIdBuscar = new JTextField(15);
+		txtNombre = new JTextField(15);
 		comboGenero = new JComboBox<>(generos);
-		txtRating = new JTextField();
-		txtFecha = new JTextField();
-		txtDuracion = new JTextField();
+		txtRating = new JTextField(15);
+		txtFecha = new JTextField(15);
+		txtDuracion = new JTextField(15);
+		idOculto = new JLabel();
+		idOculto.setVisible(false);
 
 		btnBuscar = new JButton("Buscar");
 		btnBuscar.setActionCommand("BUSCAR_EDITAR");
+
 		btnActualizar = new JButton("Actualizar");
 		btnActualizar.setActionCommand("ACTUALIZAR_EDITAR");
 		btnActualizar.setEnabled(false);
 
-		panelFormulario.add(new JLabel("ID a buscar:"));
-		panelFormulario.add(txtIdBuscar);
-		panelFormulario.add(new JLabel());
-		panelFormulario.add(btnBuscar);
+		gbc.gridx = 0; gbc.gridy = 0;
+		panelFormulario.add(new JLabel("ID a buscar:"), gbc);
+		gbc.gridx = 1;
+		panelFormulario.add(txtIdBuscar, gbc);
+		gbc.gridx = 2;
+		panelFormulario.add(btnBuscar, gbc);
 
-		panelFormulario.add(new JLabel("Nuevo nombre:"));
-		panelFormulario.add(txtNombre);
+		gbc.gridx = 0; gbc.gridy++;
+		panelFormulario.add(new JLabel("Nuevo nombre:"), gbc);
+		gbc.gridx = 1; gbc.gridwidth = 2;
+		panelFormulario.add(txtNombre, gbc);
 
-		panelFormulario.add(new JLabel("Nuevo género:"));
-		panelFormulario.add(comboGenero);
+		gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 1;
+		panelFormulario.add(new JLabel("Nuevo género:"), gbc);
+		gbc.gridx = 1; gbc.gridwidth = 2;
+		panelFormulario.add(comboGenero, gbc);
 
-		panelFormulario.add(new JLabel("Nuevo rating:"));
-		panelFormulario.add(txtRating);
+		gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 1;
+		panelFormulario.add(new JLabel("Nuevo rating:"), gbc);
+		gbc.gridx = 1; gbc.gridwidth = 2;
+		panelFormulario.add(txtRating, gbc);
 
-		panelFormulario.add(new JLabel("Nueva fecha (AAAA-MM-DD):"));
-		panelFormulario.add(txtFecha);
+		gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 1;
+		panelFormulario.add(new JLabel("Nueva fecha (AAAA-MM-DD):"), gbc);
+		gbc.gridx = 1; gbc.gridwidth = 2;
+		panelFormulario.add(txtFecha, gbc);
 
-		panelFormulario.add(new JLabel("Nueva Duracion"));
-		panelFormulario.add(txtDuracion);
+		gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 1;
+		panelFormulario.add(new JLabel("Nueva duración (min):"), gbc);
+		gbc.gridx = 1; gbc.gridwidth = 2;
+		panelFormulario.add(txtDuracion, gbc);
+		
+		gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 1;
+		panelFormulario.add(idOculto);
+		gbc.gridx = 1; gbc.gridwidth = 2;
+		panelFormulario.add(txtDuracion, gbc);
 
-		panelFormulario.add(new JLabel());
-		panelFormulario.add(btnActualizar);
+		gbc.gridx = 0; gbc.gridy++; gbc.gridwidth = 3;
+		gbc.anchor = GridBagConstraints.CENTER;
+		panelFormulario.add(btnActualizar, gbc);
 
-		JPanel centro = new JPanel(new GridBagLayout());
-		centro.setBackground(Color.WHITE);
-		centro.add(panelFormulario);
+		JPanel contenedorCentro = new JPanel(new BorderLayout());
+		contenedorCentro.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+		contenedorCentro.setBackground(Color.WHITE);
+		contenedorCentro.add(panelFormulario, BorderLayout.CENTER);
 
-		add(centro, BorderLayout.CENTER);
+		add(contenedorCentro, BorderLayout.CENTER);
 
 		btnVolver = new JButton("Volver");
 		btnVolver.setActionCommand("VOLVER");
 		JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		panelInferior.setBackground(Color.WHITE);
 		panelInferior.add(btnVolver);
-
 		add(panelInferior, BorderLayout.SOUTH);
 	}
+
 
 	public JTextField getTxtIdBuscar() {
 		return txtIdBuscar;
@@ -149,6 +175,14 @@ public class PanelEditarPelicula extends JPanel {
 
 	public String[] getGeneros() {
 		return generos;
+	}
+
+	public JLabel getIdOculto() {
+		return idOculto;
+	}
+
+	public void setIdOculto(JLabel idOculto) {
+		this.idOculto = idOculto;
 	}
 
 	public void llenarCampos(String nombre, String genero, String rating, String fecha, String duracion) {
