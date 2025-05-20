@@ -8,6 +8,14 @@ import co.edu.unbosque.exception.PeliculaNoEncontradaException;
 
 public class GestorPeliculasDao implements IGestorPeliculasDao {
 	private List<Pelicula> catalogo;
+	
+	public GestorPeliculasDao() {
+		this.catalogo = new ArrayList<Pelicula>();
+	}
+	
+	public void limpiarCatalogo() {
+		catalogo.clear();
+	}
 
 	@Override
 	public boolean guardar(Pelicula pelicula) throws PeliculaDuplicadaException {
@@ -33,15 +41,14 @@ public class GestorPeliculasDao implements IGestorPeliculasDao {
 
 	@Override
 	public Pelicula buscarPorId(String id) throws PeliculaNoEncontradaException {
-		for (Pelicula pelicula : catalogo) {
-			if (pelicula.getId().equals(id)) {
-				return pelicula;
-			} else {
-				throw new PeliculaNoEncontradaException("No se encontro la pelicula con el id: " + id);
-			}
-		}
-		return null;
+	    for (Pelicula pelicula : catalogo) {
+	        if (pelicula.getId().equals(id)) {
+	            return pelicula;
+	        }
+	    }
+	    throw new PeliculaNoEncontradaException("No se encontró la película con el id: " + id);
 	}
+
 
 	@Override
 	public List<Pelicula> buscarPorTitulo(String titulo) {

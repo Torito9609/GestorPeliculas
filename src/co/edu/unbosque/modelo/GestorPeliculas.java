@@ -46,5 +46,11 @@ public class GestorPeliculas {
 		return MapHandler.allPeliculaToPeliculaDto(ordenadas);
 	}
 
+	public GestorPeliculasDao getGestor() {
+		return gestor;
+	}
 
+	public void setGestor(GestorPeliculasDao gestor) {
+		this.gestor = gestor;
+	}
 }

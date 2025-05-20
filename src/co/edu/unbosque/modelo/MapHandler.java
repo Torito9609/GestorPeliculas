@@ -8,11 +8,11 @@ import java.util.UUID;
 public class MapHandler {
 
 	public static Pelicula peliculaDtoToPelicula(PeliculaDto peliculaDto) {
+		String id = peliculaDto.getId();
 		String nombre = peliculaDto.getNombre();
 		LocalDate fechaEstreno = peliculaDto.getFechaEstreno();
 		String genero = peliculaDto.getGenero();
 		double rating = peliculaDto.getRating();
-		String id = UUID.randomUUID().toString();
 		double duracionMinutos = peliculaDto.getDuracionMinutos();
 
 		Pelicula pelicula = new Pelicula(id, nombre, rating, genero, fechaEstreno, duracionMinutos);
@@ -21,6 +21,7 @@ public class MapHandler {
 	}
 
 	public static PeliculaDto peliculaToDto(Pelicula pelicula) {
+		String id = pelicula.getId();
 		String nombre = pelicula.getNombre();
 		LocalDate fechaEstreno = pelicula.getFechaEstreno();
 		String genero = pelicula.getGenero();
@@ -28,7 +29,8 @@ public class MapHandler {
 		double duracionMinutos = pelicula.getDuracionMinutos();
 
 		PeliculaDto peliculaDto = new PeliculaDto();
-
+		
+		peliculaDto.setId(id);
 		peliculaDto.setNombre(nombre);
 		peliculaDto.setFechaEstreno(fechaEstreno);
 		peliculaDto.setGenero(genero);

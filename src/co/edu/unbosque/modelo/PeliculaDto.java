@@ -3,6 +3,7 @@ package co.edu.unbosque.modelo;
 import java.time.LocalDate;
 
 public class PeliculaDto {
+	private String id;
 	private String nombre;
 	private double rating;
 	private String genero;
@@ -48,4 +49,13 @@ public class PeliculaDto {
 	public void setDuracionMinutos(double duracionMinutos) {
 		this.duracionMinutos = duracionMinutos;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 }
