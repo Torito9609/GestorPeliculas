@@ -2,10 +2,18 @@ package co.edu.unbosque.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import co.edu.unbosque.exception.PeliculaDuplicadaException;
+import co.edu.unbosque.exception.PeliculaNoEncontradaException;
 import co.edu.unbosque.modelo.GestorPeliculas;
+import co.edu.unbosque.modelo.GestorPeliculasDao;
+import co.edu.unbosque.modelo.Pelicula;
+import co.edu.unbosque.modelo.PeliculaDto;
 import co.edu.unbosque.vista.Vista;
 
 public class Controlador implements ActionListener{
@@ -16,6 +24,9 @@ public class Controlador implements ActionListener{
 	public Controlador() {
 		this.vista = new Vista();
 		comandos = new HashMap<String, Runnable>();
+		GestorPeliculasDao dao = new GestorPeliculasDao();
+		gestor = new GestorPeliculas();
+		gestor.setGestor(dao);
 		registrarComandos();
 		asignarOyentes();
 	}
@@ -44,6 +55,11 @@ public class Controlador implements ActionListener{
 		vista.getVentana().getVistaMenu().getComboFiltroGenero().addActionListener(this);
 	}
 	
+	private void reiniciarTabla() {
+		List<PeliculaDto> peliculas = gestor.obtenerTodas();
+		vista.getVentana().getVistaMenu().actualizarTabla(peliculas);
+	}
+	
 	private void mostrarPanelAgregar() {
 		vista.getVentana().mostrarPanelAgregar();
 		vista.getVentana().getPanelAgregar().getBtnGuardar().addActionListener(this);
@@ -51,6 +67,29 @@ public class Controlador implements ActionListener{
 	}
 	
 	private void finalizarGuardarPelicula() {
+		String id = vista.getVentana().getPanelAgregar().getTxtId().getText().trim();
+		String nombre = vista.getVentana().getPanelAgregar().getTxtNombre().getText().trim();
+		double rating = Double.parseDouble(vista.getVentana().getPanelAgregar().getTxtRating().getText().trim());
+		LocalDate fecha = LocalDate.parse(vista.getVentana().getPanelAgregar().getTxtFecha().getText().trim());
+		double duracion = Double.parseDouble(vista.getVentana().getPanelAgregar().getTxtDuracion().getText().trim());
+		String genero = vista.getVentana().getPanelAgregar().getComboGenero().getSelectedItem().toString();
+		
+		PeliculaDto pelicula = new PeliculaDto();
+		
+		pelicula.setId(id);
+		pelicula.setNombre(nombre);
+		pelicula.setRating(rating);
+		pelicula.setFechaEstreno(fecha);
+		pelicula.setDuracionMinutos(duracion);
+		pelicula.setGenero(genero);
+		
+		try {
+			gestor.guardarPelicula(pelicula);
+			reiniciarTabla();
+			volverAlInicio();
+		} catch (PeliculaDuplicadaException e) {
+			vista.mostrarMensajeError(e.getMessage());		
+		}
 		
 	}
 	
@@ -76,7 +115,14 @@ public class Controlador implements ActionListener{
 	}
 	
 	private void finalizarEliminarPelicula() {
-		
+		String idEliminar = vista.getVentana().getPanelEliminar().getIdEliminar();
+		try {
+			gestor.eliminarPelicula(idEliminar);
+			reiniciarTabla();
+			volverAlInicio();
+		} catch (PeliculaNoEncontradaException e) {
+			vista.mostrarMensajeError("La pelicula no existe");
+		}
 	}
 	
 	private void mostrarPanelBusqueda() {
@@ -102,8 +148,9 @@ public class Controlador implements ActionListener{
 	}
 	
 	private void volverAlInicio() {
-		
+		vista.getVentana().mostrarMenu();
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String comando = e.getActionCommand();

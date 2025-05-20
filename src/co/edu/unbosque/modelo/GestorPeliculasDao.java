@@ -16,9 +16,15 @@ public class GestorPeliculasDao implements IGestorPeliculasDao {
 	public void limpiarCatalogo() {
 		catalogo.clear();
 	}
+	
+	@Override
+	public List<Pelicula> obtenerTodas() {
+		return catalogo;
+	}
 
 	@Override
 	public boolean guardar(Pelicula pelicula) throws PeliculaDuplicadaException {
+		System.out.println("Guardando desde DAO");
 		for (Pelicula peliculaC : catalogo) {
 			if (pelicula.getId().equals(peliculaC.getId())) {
 				throw new PeliculaDuplicadaException("No se pueden agregar películas con ID duplicado.");
@@ -156,7 +162,4 @@ public class GestorPeliculasDao implements IGestorPeliculasDao {
 		lista.set(fin, temp);
 		return i + 1;
 	}
-
-
-
 }

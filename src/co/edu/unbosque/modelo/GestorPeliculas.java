@@ -7,9 +7,17 @@ import co.edu.unbosque.exception.PeliculaNoEncontradaException;
 
 public class GestorPeliculas {
 	private GestorPeliculasDao gestor;
+	
+	
+	
+	public List<PeliculaDto> obtenerTodas(){
+		List<Pelicula> todas = gestor.obtenerTodas();
+		return MapHandler.allPeliculaToPeliculaDto(todas);
+	}
 
 	public void guardarPelicula(PeliculaDto peliculaDto) throws PeliculaDuplicadaException {
 		Pelicula pelicula = MapHandler.peliculaDtoToPelicula(peliculaDto);
+		System.out.println("Guardando desde gestor");
 		gestor.guardar(pelicula);
 	}
 	

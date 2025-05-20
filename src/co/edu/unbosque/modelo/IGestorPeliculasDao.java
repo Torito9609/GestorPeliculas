@@ -6,6 +6,8 @@ import java.util.*;
 
 public interface IGestorPeliculasDao {
 	
+	List<Pelicula> obtenerTodas();
+	
 	boolean guardar(Pelicula pelicula) throws PeliculaDuplicadaException;
 	
 	boolean eliminar(String id) throws PeliculaNoEncontradaException;

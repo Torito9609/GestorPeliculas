@@ -1,7 +1,12 @@
 package co.edu.unbosque.vista;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import co.edu.unbosque.modelo.PeliculaDto;
+
 import java.awt.*;
+import java.util.List;
 
 public class PanelBuscarPelicula extends JPanel {
 
@@ -10,6 +15,7 @@ public class PanelBuscarPelicula extends JPanel {
     private JTable tablaResultados;
     private JScrollPane scrollTabla;
     private JButton btnVolver;
+    private DefaultTableModel modeloTabla;
 
     public PanelBuscarPelicula() {
         setLayout(new BorderLayout());
@@ -32,9 +38,16 @@ public class PanelBuscarPelicula extends JPanel {
 
         add(panelBusqueda, BorderLayout.NORTH);
 
-        String[] columnas = {"ID", "Nombre", "Género", "Fecha Estreno", "Rating"};
-        tablaResultados = new JTable(new Object[0][5], columnas);
-        scrollTabla = new JScrollPane(tablaResultados);
+        String[] columnas = { "ID", "Nombre", "Género", "Fecha Estreno", "Rating" };
+		modeloTabla = new DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+
+        tablaResultados = new JTable(modeloTabla);
+        JScrollPane scrollTabla = new JScrollPane(tablaResultados);
         add(scrollTabla, BorderLayout.CENTER);
 
         btnVolver = new JButton("Volver");
@@ -58,13 +71,22 @@ public class PanelBuscarPelicula extends JPanel {
         return btnVolver;
     }
 
-    public void mostrarResultados(Object[][] datos) {
-        String[] columnas = {"ID", "Nombre", "Género", "Fecha Estreno", "Rating"};
-        tablaResultados.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
-    }
+    public void actualizarTabla(List<PeliculaDto> listaPeliculas) {
+		modeloTabla.setRowCount(0);
+
+		for (PeliculaDto pelicula : listaPeliculas) {
+			Object[] fila = {
+				pelicula.getId(),
+				pelicula.getNombre(),
+				pelicula.getGenero(),
+				pelicula.getFechaEstreno().toString(),
+				pelicula.getRating()
+			};
+			modeloTabla.addRow(fila);
+		}		
+	}
 
     public void limpiarBusqueda() {
-        txtBuscar.setText("");
-        mostrarResultados(new Object[0][5]);
+        
     }
 }

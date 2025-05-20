@@ -1,14 +1,20 @@
 package co.edu.unbosque.vista;
 
 import javax.swing.*;
+import java.util.List;
+
+import javax.swing.table.DefaultTableModel;
+
+import co.edu.unbosque.modelo.PeliculaDto;
+
 import java.awt.*;
 
 public class VistaPrincipal extends JPanel {
 
 	private JButton btnAgregar, btnEditar, btnEliminar, btnBuscar, btnLimpiarFiltros;
 	private JTable tablaPeliculas;
-	private JScrollPane scrollTabla;
 	private JComboBox<String> comboFiltroGenero, comboOrdenarPor, comboDireccion;
+	private DefaultTableModel modeloTabla;
 
 	public VistaPrincipal() {
 		setLayout(new BorderLayout());
@@ -39,8 +45,16 @@ public class VistaPrincipal extends JPanel {
 		panelCentro.setBackground(Color.WHITE);
 
 		String[] columnas = { "ID", "Nombre", "Género", "Fecha Estreno", "Rating" };
-		tablaPeliculas = new JTable(new Object[0][5], columnas);
-		scrollTabla = new JScrollPane(tablaPeliculas);
+		modeloTabla = new DefaultTableModel(null, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+
+        tablaPeliculas = new JTable(modeloTabla);
+        JScrollPane scrollTabla = new JScrollPane(tablaPeliculas);
+
 		panelCentro.add(scrollTabla, BorderLayout.CENTER);
 
 		JPanel panelFiltro = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -113,8 +127,18 @@ public class VistaPrincipal extends JPanel {
 		this.comboDireccion = comboDireccion;
 	}
 
-	public void actualizarTabla(Object[][] datos) {
-		String[] columnas = { "ID", "Nombre", "Género", "Fecha Estreno", "Rating" };
-		tablaPeliculas.setModel(new javax.swing.table.DefaultTableModel(datos, columnas));
+	public void actualizarTabla(List<PeliculaDto> listaPeliculas) {
+		modeloTabla.setRowCount(0);
+
+		for (PeliculaDto pelicula : listaPeliculas) {
+			Object[] fila = {
+				pelicula.getId(),
+				pelicula.getNombre(),
+				pelicula.getGenero(),
+				pelicula.getFechaEstreno().toString(),
+				pelicula.getRating()
+			};
+			modeloTabla.addRow(fila);
+		}		
 	}
 }
